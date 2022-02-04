@@ -34,8 +34,19 @@ app.get("/contact", function (req, res, next) {
 });
 
 
+app.get("/search", function (req, res, next) {
+    
+    let {maxPrice} = req.query;
+    maxPrice = Number(maxPrice);
 
-// example url: http://localhost:3000/products/luxury-yatch/61fbd85a1f01432545d1599b/
+    Product.find({ price: {$lte: maxPrice} })
+        .then(productsFromDB => {
+            res.render("search", {products: productsFromDB});
+        })
+        .catch(error => console.log("error getting data from DB", error));
+});
+
+
 
 app.get("/products/:productTitle/:productId", function (req, res, next) {
     Product.findById(req.params.productId)
