@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require('body-parser');
 const hbs = require("hbs");
 const app = express();
 
@@ -11,6 +12,7 @@ app.set("view engine", "hbs");
 hbs.registerPartials(__dirname + "/views/partials");
 
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // connect to DB
@@ -46,6 +48,10 @@ app.get("/search", function (req, res, next) {
         .catch(error => console.log("error getting data from DB", error));
 });
 
+app.post("/login", (req, res, next)=>{
+    const {email, password} = req.body;
+    res.send(`Hello ${email} we've received your request to login but we don't like your password.`);
+});
 
 
 app.get("/products/:productTitle/:productId", function (req, res, next) {
